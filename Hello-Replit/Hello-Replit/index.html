@@ -1,0 +1,147 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>我的個人網頁</title>
+  <link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+  <header>
+    <h1>歡迎來到我的個人網頁</h1>
+  </header>
+  
+  <nav>
+    <a href="#home">首頁</a>
+    <a href="#about">關於我</a>
+    <a href="#skills">技能</a>
+    <a href="#portfolio">作品集</a>
+    <a href="#contact">聯絡方式</a>
+  </nav>
+
+  <main>
+    <section id="about">
+      <h2>關於我</h2>
+      <div class="profile-image">
+        <img src="attached_assets/IMG_2404.jpg" alt="個人照片">
+        <h3 class="profile-name">謝怡琳 Lynn Hsieh</h3>
+      </div>
+      <div class="info">
+        <p><strong>學歷：</strong>國立台灣科技大學-企業管理系-就讀中</p>
+      </div>
+    </section>
+
+    <section id="skills">
+      <h2>證照技能</h2>
+      <ul>
+        <li>會計資訊丙級證照</li>
+        <li>會計人工丙級證照</li>
+        <li>國際貿易丙級證照</li>
+        <li>多益570</li>
+      </ul>
+    </section>
+
+    <section id="portfolio">
+      <h2>作品集</h2>
+      <div class="portfolio-content">
+        <div class="project-card" onclick="toggleGallery()">
+          <img src="attached_assets/cwgv_463_61-scaled.webp" alt="AI Project Cover" class="cover-image">
+          <h3>人工智慧應用</h3>
+        </div>
+        
+        <div id="gallery" class="gallery-overlay">
+          <span class="close-button" onclick="toggleGallery()">&times;</span>
+          <div class="gallery-content">
+            <img src="attached_assets/螢幕擷取畫面 (2).png" alt="Streamlit CV2">
+            <img src="attached_assets/螢幕擷取畫面 (4) (1).png" alt="Gemma3 LLM">
+            <img src="attached_assets/螢幕擷取畫面 (4) (2).png" alt="Pose Detection">
+            <img src="attached_assets/螢幕擷取畫面 (4).png" alt="Face Detection">
+            <img src="attached_assets/螢幕擷取畫面 (5).png" alt="Object Detection">
+            <img src="attached_assets/螢幕擷取畫面 (6).png" alt="Background Change">
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="ai-demo">
+      <h2>AI 影像辨識展示</h2>
+      <div class="ai-demo-container">
+        <button type="button" onclick="init()" class="start-button">開始展示</button>
+        <div id="webcam-container" class="webcam-box"></div>
+        <div id="label-container" class="prediction-results"></div>
+      </div>
+    </section>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
+    <script type="text/javascript">
+        // More API functions here:
+        // https://github.com/googlecreativelab/teachablemachine-community/tree/master/libraries/image
+
+        // the link to your model provided by Teachable Machine export panel
+        const URL = "https://teachablemachine.withgoogle.com/models/bQr0YCNFp/";
+
+        let model, webcam, labelContainer, maxPredictions;
+
+        // Load the image model and setup the webcam
+        async function init() {
+            const modelURL = URL + "model.json";
+            const metadataURL = URL + "metadata.json";
+
+            // load the model and metadata
+            // Refer to tmImage.loadFromFiles() in the API to support files from a file picker
+            // or files from your local hard drive
+            // Note: the pose library adds "tmImage" object to your window (window.tmImage)
+            model = await tmImage.load(modelURL, metadataURL);
+            maxPredictions = model.getTotalClasses();
+
+            // Convenience function to setup a webcam
+            const flip = true; // whether to flip the webcam
+            webcam = new tmImage.Webcam(200, 200, flip); // width, height, flip
+            await webcam.setup(); // request access to the webcam
+            await webcam.play();
+            window.requestAnimationFrame(loop);
+
+            // append elements to the DOM
+            document.getElementById("webcam-container").appendChild(webcam.canvas);
+            labelContainer = document.getElementById("label-container");
+            for (let i = 0; i < maxPredictions; i++) { // and class labels
+                labelContainer.appendChild(document.createElement("div"));
+            }
+        }
+
+        async function loop() {
+            webcam.update(); // update the webcam frame
+            await predict();
+            window.requestAnimationFrame(loop);
+        }
+
+        // run the webcam image through the image model
+        async function predict() {
+            // predict can take in an image, video or canvas html element
+            const prediction = await model.predict(webcam.canvas);
+            for (let i = 0; i < maxPredictions; i++) {
+                const classPrediction =
+                    prediction[i].className + ": " + prediction[i].probability.toFixed(2);
+                labelContainer.childNodes[i].innerHTML = classPrediction;
+            }
+        }
+    </script>
+
+
+    <section id="contact">
+      <h2>聯絡方式</h2>
+      <p><strong>聯繫電話：</strong>886-978-479-756</p>
+      <p><strong>信箱：</strong>aaqq1063@gmail.com</p>
+      <p><strong>Line ID：</strong>0978479756</p>
+      <p><strong>Facebook：</strong>謝怡琳</p>
+      <p><strong>Instagram：</strong><a href="https://www.instagram.com/yi_lynn__" target="_blank">yi_lynn__</a></p>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2024 版權所有</p>
+  </footer>
+  
+  <script src="script.js"></script>
+</body>
+</html>
