@@ -200,3 +200,31 @@ h2, h3 {
   color: #2c3e50;
   font-weight: bold;
 }
+.project-category {
+  margin-bottom: 2rem;
+}
+
+.project-item-container {
+  background-color: #E3F2FD;
+  padding: 1rem;
+  border-radius: 10px;
+  margin-top: 1rem;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+}
+
+.project-item-container {
+  display: flex;
+  justify-content: center;
+  align-items: center; /* 可選，如果你想要上下垂直置中也可保留 */
+  padding: 20px 0;
+}
+#project-item {
+  text-align: center;
+}
+.demo-section {
+  background-color: #E3F2FD;
+  padding: 1rem;
+  border-radius: 10px;
+  margin-top: 1rem;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+}
